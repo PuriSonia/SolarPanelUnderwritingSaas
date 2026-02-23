@@ -162,7 +162,7 @@ class AuditLog(Base):
     action = Column(String, nullable=False)
     entity = Column(String, nullable=True)
     entity_id = Column(String, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    event_metadata = Column(JSON, nullable=True)
 
     created_at = Column(DateTime, default=datetime.utcnow)
 
