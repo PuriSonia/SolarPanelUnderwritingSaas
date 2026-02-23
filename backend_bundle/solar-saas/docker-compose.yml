@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: solar_user
+      POSTGRES_PASSWORD: solar_pass
+      POSTGRES_DB: solar_saas
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgresql://solar_user:solar_pass@db:5432/solar_saas
+      SECRET_KEY: change_me_in_prod
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      STORAGE_DIR: /data/storage
+    ports:
+      - "8000:8000"
+    volumes:
+      - storage:/data/storage
+
+  worker:
+    build: ./backend
+    depends_on:
+      - backend
+      - redis
+      - db
+    environment:
+      DATABASE_URL: postgresql://solar_user:solar_pass@db:5432/solar_saas
+      SECRET_KEY: change_me_in_prod
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      STORAGE_DIR: /data/storage
+    command: celery -A app.celery_app worker --loglevel=INFO
+    volumes:
+      - storage:/data/storage
+
+volumes:
+  pgdata:
+  storage:

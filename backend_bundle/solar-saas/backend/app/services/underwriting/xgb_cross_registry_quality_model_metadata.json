@@ -1,0 +1,21 @@
+{
+  "label_classes": [
+    "A",
+    "B",
+    "C"
+  ],
+  "feature_columns_before_preprocess": [
+    "registry",
+    "project_type",
+    "afolu_activities",
+    "methodology",
+    "status",
+    "country",
+    "region",
+    "est_annual_er",
+    "Crediting_Years",
+    "ProjReg_Year"
+  ],
+  "notes": "Native XGBoost model only. Preprocessing (one-hot, imputers) is not included; use the joblib pipeline for end-to-end scoring.",
+  "version": "cross-registry v1"
+}

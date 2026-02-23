@@ -1,0 +1,18 @@
+SALES DEMO SCRIPT (2–3 minutes)
+
+1) Open the app:
+   http://127.0.0.1:8000
+
+2) Select a sample project (preset dropdown) and click Analyze.
+   - Point to Integrity Class (A/B/C).
+   - Point to Issuance Probability bar.
+
+3) Show the return impact:
+   - Base IRR vs Risk-Adjusted IRR
+   - IRR Impact (bps)
+
+4) Click "Download PDF Summary"
+   - Generates an underwriting-ready one-pager for IC / lenders.
+
+Core line:
+“We price carbon integrity risk directly into project returns.”

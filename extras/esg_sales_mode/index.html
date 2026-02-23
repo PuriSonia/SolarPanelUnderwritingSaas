@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carbon-Integrated ESG Risk Engine (Investor Demo)</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        input, button { padding: 8px; margin: 5px 0; width: 300px; }
+        button { width: 320px; }
+        .result { margin-top: 20px; padding: 15px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h2>Carbon-Integrated ESG Risk Engine</h2>
+
+    <h3>Financial Inputs</h3>
+    <input id="capex" placeholder="Capex" value="5000000"><br>
+    <input id="energy_revenue" placeholder="Energy Revenue" value="800000"><br>
+    <input id="carbon_revenue" placeholder="Carbon Revenue" value="150000"><br>
+    <input id="opex" placeholder="Opex" value="120000"><br>
+    <input id="years" placeholder="Years" value="15"><br>
+    <input id="discount_rate" placeholder="Discount Rate (0.12)" value="0.12"><br>
+
+    <button onclick="analyze()">Analyze Project</button>
+
+    <div class="result" id="output"></div>
+
+<script>
+async function analyze() {
+    const response = await fetch('/analyze_project', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'CHANGE_ME_DEMO_KEY'
+        },
+        body: JSON.stringify({
+            ml_features: {
+                registry: 1,
+                project_type: 2,
+                afolu_activities: 0,
+                methodology: 5,
+                status: 1,
+                country: 91,
+                region: 3,
+                est_annual_er: 50000,
+                Crediting_Years: 10,
+                ProjReg_Year: 2022
+            },
+            financial_inputs: {
+                capex: parseFloat(document.getElementById('capex').value),
+                energy_revenue: parseFloat(document.getElementById('energy_revenue').value),
+                carbon_revenue: parseFloat(document.getElementById('carbon_revenue').value),
+                opex: parseFloat(document.getElementById('opex').value),
+                years: parseInt(document.getElementById('years').value),
+                discount_rate: parseFloat(document.getElementById('discount_rate').value)
+            }
+        })
+    });
+
+    const data = await response.json();
+
+    document.getElementById('output').innerHTML = `
+        <strong>Integrity Class:</strong> ${data.integrity.ci_class}<br>
+        <strong>Base IRR:</strong> ${data.base_case.irr}<br>
+        <strong>Risk Adjusted IRR:</strong> ${data.risk_adjusted.irr}<br>
+        <strong>Issuance Probability:</strong> ${data.integrity.issuance_probability}
+    `;
+}
+</script>
+
+</body>
+</html>
