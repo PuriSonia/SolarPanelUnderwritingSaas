@@ -13,3 +13,4 @@ celery==5.4.0
 redis==5.0.8
 reportlab==4.2.2
 stripe==10.10.0
+xgboost==2.0.3
